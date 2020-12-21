@@ -216,7 +216,7 @@ const roomTaxRate = function (rate) {
     return value + value * rate;
   };
 };
-*/
+
 
 const poll = {
   question: 'What is your favorite programming language?',
@@ -226,16 +226,77 @@ const poll = {
   registerNewAnswer() {
     // Get answer
     const answer = Number(
-      promt(
-        `${this.question}\n${this.options}\n${this.options.join('n')}
+      prompt(
+        `${this.question}\n${this.options.join('\n')}
         \n(Write option number)`
       )
     );
     console.log(answer);
 
     // Register answer
+    typeof answer === 'number' &&
+      answer < this.answers.length &&
+      this.answers[answer]++;
+
+    this.displayResults();
+    this.displayResults('string');
+  },
+  displayResults(type = 'array') {
+    if (type === 'array') {
+      console.log(this.answers);
+    } else if (type === 'string') {
+      console.log(`Poll results are ${this.answers.join(', ')}`);
+    }
   },
 };
-poll.registerNewAnswer();
+// poll.registerNewAnswer();
 
-// Check Back Later
+document
+  .querySelector('.poll')
+  .addEventListener('click', poll.registerNewAnswer.bind(poll));
+
+poll.displayResults.call({ answers: [5, 2, 3] }, 'string');
+
+
+
+const runOnce = function () {
+  console.log('This will never run again');
+};
+runOnce();
+
+// IIFE
+(function () {
+  console.log('This will never run again');
+  const isPrivate = 23;
+})();
+
+//  This scope is cannot be accessed because its not inside the function
+// console.log(isPrivate);
+
+(() => console.log('This will ALSO never run agiain'))();
+
+{
+  const isPrivate = 23;
+  var notPrivate = 46;
+}
+// console.log(isPrivate);
+console.log(notPrivate);
+
+*/
+
+const secureBooking = function () {
+  let passengerCount = 0;
+
+  return function () {
+    passengerCount++;
+    console.log(`${passengerCount} passengers`);
+  };
+};
+
+const booker = secureBooking();
+
+booker();
+booker();
+booker();
+
+console.dir(booker);
